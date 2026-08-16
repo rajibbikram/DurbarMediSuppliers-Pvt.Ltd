@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FaArrowLeft, FaSave } from 'react-icons/fa';
+import { FaArrowLeft, FaSave, FaBars, FaSignOutAlt } from 'react-icons/fa';
+import AdminSidebar from '../components/AdminSidebar';
 
 const OfferItemForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEditing = !!id;
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -19,9 +21,10 @@ const OfferItemForm = () => {
     if (isEditing) {
       fetchOfferItem();
     }
-  }, [id]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, isEditing]);
 
-  const fetchOfferItem = async () => {
+  const fetchOfferItem = useCallback(async () => {
     try {
       const response = await fetch(`http://localhost:5000/api/offer-items/${id}`);
       if (response.ok) {
@@ -38,6 +41,16 @@ const OfferItemForm = () => {
     } finally {
       setFetchLoading(false);
     }
+  }, [id]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('adminToken');
+    localStorage.removeItem('adminInfo');
+    navigate('/admin/login');
+  };
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
   };
 
   const handleChange = (e) => {
@@ -94,27 +107,54 @@ const OfferItemForm = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-lg border-b border-gray-200">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={() => navigate('/admin/offer-items')}
-              className="flex items-center text-blue-600 hover:text-blue-700 transition-colors px-3 py-2 rounded-lg hover:bg-blue-50"
-            >
-              <FaArrowLeft className="mr-2" />
-              Back to Offer Items
-            </button>
-            <div className="h-8 w-px bg-gray-300"></div>
-            <h1 className="text-2xl font-bold text-blue-600">
-              {isEditing ? 'Edit Offer Item' : 'Add Offer Item'}
-            </h1>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-50 to-medical-50 flex">
+      <AdminSidebar isOpen={sidebarOpen} onToggle={toggleSidebar} />
+      
+      {/* Main Content */}
+      <div className="flex-1 min-w-0 transition-all duration-300">
+        {/* Mobile Header */}
+        <header className="bg-white shadow-lg border-b border-gray-200 lg:hidden sticky top-0 z-30">
+          <div className="container mx-auto px-4 py-3 sm:py-4">
+            <div className="flex items-center justify-between">
+              <button
+                onClick={toggleSidebar}
+                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              >
+                <FaBars className="text-gray-600 text-xl" />
+              </button>
+              <h1 className="text-lg sm:text-xl font-bold text-blue-600">
+                {isEditing ? 'Edit Offer Item' : 'Add Offer Item'}
+              </h1>
+              <button
+                onClick={handleLogout}
+                className="p-2 rounded-lg hover:bg-red-50 transition-colors"
+              >
+                <FaSignOutAlt className="text-red-500" />
+              </button>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      <div className="container mx-auto px-4 py-8">
+        {/* Desktop Header */}
+        <header className="bg-white shadow-lg border-b border-gray-200 hidden lg:block">
+          <div className="container mx-auto px-4 py-4">
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => navigate('/admin/offer-items')}
+                className="flex items-center text-blue-600 hover:text-blue-700 transition-colors px-3 py-2 rounded-lg hover:bg-blue-50"
+              >
+                <FaArrowLeft className="mr-2" />
+                Back to Offer Items
+              </button>
+              <div className="h-8 w-px bg-gray-300"></div>
+              <h1 className="text-2xl font-bold text-blue-600">
+                {isEditing ? 'Edit Offer Item' : 'Add Offer Item'}
+              </h1>
+            </div>
+          </div>
+        </header>
+
+      <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 lg:py-8">
         <div className="max-w-2xl mx-auto">
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-xl mb-6">
@@ -179,6 +219,7 @@ const OfferItemForm = () => {
             </form>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

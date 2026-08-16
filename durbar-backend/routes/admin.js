@@ -3,6 +3,7 @@ const router = express.Router();
 const Product = require('../models/Product');
 const Admin = require('../models/Admin');
 const Testimonial = require('../models/Testimonial');
+const TeamMember = require('../models/TeamMember');
 const auth = require('../middleware/auth');
 
 // @route   GET /api/admin/dashboard
@@ -19,6 +20,9 @@ router.get('/dashboard', auth, async (req, res) => {
     const featuredTestimonials = await Testimonial.countDocuments({ featured: true });
     const activeTestimonials = await Testimonial.countDocuments({ active: true });
 
+    const totalTeamMembers = await TeamMember.countDocuments();
+    const activeTeamMembers = await TeamMember.countDocuments({ active: true });
+
     // Get recent products
     const recentProducts = await Product.find()
       .sort({ createdAt: -1 })
@@ -32,7 +36,9 @@ router.get('/dashboard', auth, async (req, res) => {
         outOfStockProducts,
         totalTestimonials,
         featuredTestimonials,
-        activeTestimonials
+        activeTestimonials,
+        totalTeamMembers,
+        activeTeamMembers
       },
       recentProducts
     });

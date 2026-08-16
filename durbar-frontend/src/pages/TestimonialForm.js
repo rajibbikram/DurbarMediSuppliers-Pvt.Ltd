@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FaArrowLeft, FaSave, FaStar, FaUpload, FaTimes } from 'react-icons/fa';
+import { FaArrowLeft, FaSave, FaStar, FaUpload, FaTimes, FaBars, FaSignOutAlt } from 'react-icons/fa';
+import AdminSidebar from '../components/AdminSidebar';
 
 const TestimonialForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEditing = !!id;
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const [formData, setFormData] = useState({
     clientName: '',
@@ -26,9 +28,10 @@ const TestimonialForm = () => {
     if (isEditing) {
       fetchTestimonial();
     }
-  }, [id]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, isEditing]);
 
-  const fetchTestimonial = async () => {
+  const fetchTestimonial = useCallback(async () => {
     try {
       const response = await fetch(`http://localhost:5000/api/testimonials/${id}`);
       if (response.ok) {
@@ -52,6 +55,16 @@ const TestimonialForm = () => {
     } finally {
       setFetchLoading(false);
     }
+  }, [id]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('adminToken');
+    localStorage.removeItem('adminInfo');
+    navigate('/admin/login');
+  };
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
   };
 
   const handleFileChange = (e) => {
@@ -176,26 +189,53 @@ const TestimonialForm = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-medical-50 via-white to-teal-50">
-      {/* Header */}
-      <header className="bg-white shadow-soft">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={() => navigate('/admin/testimonials')}
-              className="flex items-center text-medical-600 hover:text-medical-700 transition-colors"
-            >
-              <FaArrowLeft className="mr-2" />
-              Back to Testimonials
-            </button>
-            <h1 className="text-2xl font-bold text-gray-900">
-              {isEditing ? 'Edit Testimonial' : 'Add New Testimonial'}
-            </h1>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-50 to-medical-50 flex">
+      <AdminSidebar isOpen={sidebarOpen} onToggle={toggleSidebar} />
+      
+      {/* Main Content */}
+      <div className="flex-1 min-w-0 transition-all duration-300">
+        {/* Mobile Header */}
+        <header className="bg-white shadow-lg border-b border-gray-200 lg:hidden sticky top-0 z-30">
+          <div className="container mx-auto px-4 py-3 sm:py-4">
+            <div className="flex items-center justify-between">
+              <button
+                onClick={toggleSidebar}
+                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              >
+                <FaBars className="text-gray-600 text-xl" />
+              </button>
+              <h1 className="text-lg sm:text-xl font-bold text-blue-600">
+                {isEditing ? 'Edit Testimonial' : 'Add Testimonial'}
+              </h1>
+              <button
+                onClick={handleLogout}
+                className="p-2 rounded-lg hover:bg-red-50 transition-colors"
+              >
+                <FaSignOutAlt className="text-red-500" />
+              </button>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      <div className="container mx-auto px-4 py-8">
+        {/* Desktop Header */}
+        <header className="bg-white shadow-soft hidden lg:block">
+          <div className="container mx-auto px-4 py-4">
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => navigate('/admin/testimonials')}
+                className="flex items-center text-medical-600 hover:text-medical-700 transition-colors"
+              >
+                <FaArrowLeft className="mr-2" />
+                Back to Testimonials
+              </button>
+              <h1 className="text-2xl font-bold text-gray-900">
+                {isEditing ? 'Edit Testimonial' : 'Add New Testimonial'}
+              </h1>
+            </div>
+          </div>
+        </header>
+
+      <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 lg:py-8">
         <div className="max-w-2xl mx-auto">
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-xl mb-6">
@@ -382,6 +422,7 @@ const TestimonialForm = () => {
             </form>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

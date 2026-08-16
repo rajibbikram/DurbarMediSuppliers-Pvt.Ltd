@@ -26,6 +26,7 @@ app.use('/api/testimonials', require('./routes/testimonials'));
 app.use('/api/contact', require('./routes/contact'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/offer-items', require('./routes/offerItems'));
+app.use('/api/team-members', require('./routes/teamMembers'));
 
 // Basic route for testing
 app.get('/', (req, res) => {

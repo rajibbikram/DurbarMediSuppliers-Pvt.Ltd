@@ -15,13 +15,15 @@ import TestimonialManagement from './pages/TestimonialManagement';
 import TestimonialForm from './pages/TestimonialForm';
 import OfferItemManagement from './pages/OfferItemManagement';
 import OfferItemForm from './pages/OfferItemForm';
+import TeamMemberManagement from './pages/TeamMemberManagement';
+import TeamMemberForm from './pages/TeamMemberForm';
 
 function App() {
   return (
     <Router>
       <div id="root" className="flex flex-col min-h-screen bg-gradient-to-br from-blue-50 via-white to-gray-50">
         <Header />
-        <main className="flex-grow-1">
+        <main className="flex-grow">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <Routes>
               {/* Public Routes */}
@@ -43,6 +45,9 @@ function App() {
               <Route path="/admin/offer-items" element={<OfferItemManagement />} />
               <Route path="/admin/offer-items/add" element={<OfferItemForm />} />
               <Route path="/admin/offer-items/edit/:id" element={<OfferItemForm />} />
+              <Route path="/admin/team-members" element={<TeamMemberManagement />} />
+              <Route path="/admin/team-members/add" element={<TeamMemberForm />} />
+              <Route path="/admin/team-members/edit/:id" element={<TeamMemberForm />} />
             </Routes>
           </div>
         </main>

@@ -2,20 +2,85 @@ import React, { useState, useEffect } from 'react';
 import img1 from '../assets/product/extensiontube.png';
 import img2 from '../assets/product/image.png';
 import img3 from '../assets/product/kannulex.png';
-import ceo from '../assets/member/ceo.png';
+import { API_BASE_URL } from '../utils/api';
+// eslint-disable-next-line no-unused-vars
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 
 const About = () => {
   const [offerItems, setOfferItems] = useState([]);
+  const [teamMembers, setTeamMembers] = useState([]);
   const [loading, setLoading] = useState(true);
+  // eslint-disable-next-line no-unused-vars
+  const [currentTeamIndex, setCurrentTeamIndex] = useState(0);
+  // eslint-disable-next-line no-unused-vars
+  const [teamCardsPerView, setTeamCardsPerView] = useState(4);
 
   useEffect(() => {
     fetchOfferItems();
+    fetchTeamMembers();
+    
+    // Set cards per view based on screen size for team carousel
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setTeamCardsPerView(1);
+      } else if (window.innerWidth < 1024) {
+        setTeamCardsPerView(2);
+      } else {
+        setTeamCardsPerView(4);
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // Reset current index when team members change or cards per view changes
+  useEffect(() => {
+    setCurrentTeamIndex(0);
+  }, [teamMembers.length, teamCardsPerView]);
+
+  // Auto-slide for team carousel
+  useEffect(() => {
+    if (teamMembers.length > teamCardsPerView) {
+      const interval = setInterval(() => {
+        setCurrentTeamIndex((prevIndex) => {
+          const maxIdx = teamMembers.length - teamCardsPerView;
+          return prevIndex >= maxIdx ? 0 : prevIndex + 1;
+        });
+      }, 5000); // Auto-slide every 5 seconds
+      return () => clearInterval(interval);
+    }
+  }, [teamMembers.length, teamCardsPerView]);
+
+  const teamShouldShowNavigation = teamMembers.length > teamCardsPerView;
+  const teamMaxIndex = teamShouldShowNavigation ? teamMembers.length - teamCardsPerView : 0;
+  // eslint-disable-next-line no-unused-vars
+  const teamTotalPages = teamShouldShowNavigation ? teamMembers.length - teamCardsPerView + 1 : 1;
+
+  // eslint-disable-next-line no-unused-vars
+  const goToTeamPrevious = () => {
+    setCurrentTeamIndex((prevIndex) => 
+      prevIndex === 0 ? teamMaxIndex : prevIndex - 1
+    );
+  };
+
+  // eslint-disable-next-line no-unused-vars
+  const goToTeamNext = () => {
+    setCurrentTeamIndex((prevIndex) => 
+      prevIndex >= teamMaxIndex ? 0 : prevIndex + 1
+    );
+  };
+
+  // eslint-disable-next-line no-unused-vars
+  const goToTeamSlide = (index) => {
+    setCurrentTeamIndex(Math.min(index, teamMaxIndex));
+  };
 
   const fetchOfferItems = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/offer-items');
+      const response = await fetch(`${API_BASE_URL}/api/offer-items`);
       if (response.ok) {
         const data = await response.json();
         setOfferItems(data);
@@ -24,6 +89,18 @@ const About = () => {
       console.error('Error fetching offer items:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchTeamMembers = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/team-members?active=true`);
+      if (response.ok) {
+        const data = await response.json();
+        setTeamMembers(data);
+      }
+    } catch (error) {
+      console.error('Error fetching team members:', error);
     }
   };
 
@@ -131,26 +208,131 @@ const About = () => {
           <p className="font-semibold text-base sm:text-lg md:text-xl text-gray-900">Thank you!</p>
         </div>
 
-        <div className="flex justify-center">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 md:gap-12">
-            {[
-              { id: 1, name: 'Mani Raj Shah', post: 'CEO', image: ceo },
-              { id: 2, name: 'Ram Bahadur', post: 'Operations Manager', image: ceo },
-              { id: 3, name: 'Sita Devi', post: 'Sales Manager', image: ceo }
-            ].map((item) => (
-              <div key={item.id} className="text-center">
-                <div className="relative inline-block mb-3 sm:mb-4 md:mb-6">
-                  <img src={item.image} alt={item.name} className="w-32 h-32 sm:w-40 sm:h-40 md:w-56 md:h-56 object-cover rounded-full shadow-2xl border-4 border-white" />
-                  <div className="absolute bottom-0 right-0 bg-blue-600 text-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-full text-xs sm:text-xs md:text-sm font-semibold shadow-md">
-                    {item.post}
-                  </div>
+        {/* Team Section */}
+        {teamMembers.length > 0 && (
+          <div className="mt-8 sm:mt-12 md:mt-16">
+            <div className="text-center mb-8 sm:mb-12">
+              <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">Our Leadership Team</h3>
+              <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">Meet the experienced professionals dedicated to your healthcare needs</p>
+              <div className="w-20 sm:w-24 h-1 bg-blue-600 mx-auto mt-4 sm:mt-6 rounded-full"></div>
+            </div>
+            
+            <div className="relative">
+              {/* Navigation Arrows - Only show if we have more team members than cards per view */}
+              {teamShouldShowNavigation && (
+                <>
+                  <button
+                    onClick={goToTeamPrevious}
+                    className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 md:-translate-x-12 z-10 bg-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 text-blue-600 hover:text-blue-700"
+                  >
+                    <FaChevronLeft className="text-xl" />
+                  </button>
+                  <button
+                    onClick={goToTeamNext}
+                    className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 md:translate-x-12 z-10 bg-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 text-blue-600 hover:text-blue-700"
+                  >
+                    <FaChevronRight className="text-xl" />
+                  </button>
+                </>
+              )}
+
+              {/* Slider Container */}
+              <div className="overflow-hidden mx-4 md:mx-8">
+                <div 
+                  className="flex transition-transform duration-500 ease-in-out"
+                  style={{ transform: `translateX(-${currentTeamIndex * (100 / teamCardsPerView)}%)` }}
+                >
+                  {teamMembers.map((member) => (
+                    <div 
+                      key={member._id} 
+                      className="flex-shrink-0 px-2 md:px-3"
+                      style={{ width: `${100 / teamCardsPerView}%` }}
+                    >
+                      <div className="group">
+                        <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-200 max-w-[280px] mx-auto">
+                          {/* Profile Image */}
+                          <div className="relative pt-6 pb-4 px-4 text-center bg-gray-50">
+                            <div className="relative inline-block">
+                              <div className="w-20 h-20 rounded-full border-3 border-white shadow-sm overflow-hidden bg-white">
+                                <img 
+                                  src={member.image.startsWith('http') ? member.image : `${API_BASE_URL}${member.image}`} 
+                                  alt={member.name} 
+                                  className="w-full h-full object-cover"
+                                  onError={(e) => {
+                                    e.target.src = 'https://img.icons8.com/color/480/user.png';
+                                  }}
+                                />
+                              </div>
+                              {/* Online/Active Indicator */}
+                              <div className="absolute bottom-1 right-1 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+                            </div>
+                          </div>
+                          
+                          {/* Profile Content */}
+                          <div className="p-5 text-center">
+                            {/* Position */}
+                            <p className="text-blue-600 font-semibold text-sm mb-2 truncate">{member.position}</p>
+                            
+                            {/* Name */}
+                            <h4 className="text-base font-bold text-gray-900 mb-3 truncate">
+                              {member.name}
+                            </h4>
+                            
+                            {/* Bio */}
+                            {member.bio && (
+                              <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                                {member.bio}
+                              </p>
+                            )}
+                            
+                            {/* Contact Information */}
+                            <div className="space-y-2">
+                              {member.email && (
+                                <a 
+                                  href={`mailto:${member.email}`}
+                                  className="flex items-center justify-center text-gray-600 hover:text-blue-600 transition-colors text-sm truncate"
+                                >
+                                  <span className="mr-2 text-sm">✉️</span>
+                                  {member.email}
+                                </a>
+                              )}
+                              {member.phone && (
+                                <a 
+                                  href={`tel:${member.phone}`}
+                                  className="flex items-center justify-center text-gray-600 hover:text-blue-600 transition-colors text-sm truncate"
+                                >
+                                  <span className="mr-2 text-sm">📞</span>
+                                  {member.phone}
+                                </a>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div className="font-bold text-xl sm:text-2xl text-gray-900 mb-2">{item.name}</div>
-                <div className="text-blue-600 font-medium text-sm sm:text-base">{item.post}</div>
               </div>
-            ))}
+
+              {/* Navigation Dots */}
+              {teamShouldShowNavigation && (
+                <div className="flex justify-center mt-8 space-x-3">
+                  {Array.from({ length: teamTotalPages }).map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => goToTeamSlide(index)}
+                      className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                        index === currentTeamIndex 
+                          ? 'bg-blue-600 w-8' 
+                          : 'bg-gray-300 hover:bg-gray-400'
+                      }`}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );

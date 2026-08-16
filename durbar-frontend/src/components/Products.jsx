@@ -21,6 +21,7 @@ const Products = () => {
   // Fetch products from API
   useEffect(() => {
     fetchProducts();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.search]);
 
   const fetchProducts = async () => {

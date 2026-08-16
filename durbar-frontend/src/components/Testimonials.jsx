@@ -61,7 +61,6 @@ const Testimonials = () => {
     }
   };
 
-  const effectiveCardsPerView = Math.min(cardsPerView, testimonials.length);
   const shouldShowNavigation = testimonials.length > cardsPerView;
   const maxIndex = shouldShowNavigation ? testimonials.length - cardsPerView : 0;
   const totalPages = shouldShowNavigation ? testimonials.length - cardsPerView + 1 : 1;
