@@ -5,8 +5,8 @@ require('dotenv').config();
 // Default admin credentials
 const defaultAdmin = {
   username: 'manishah',
-  email: 'shah.main20@gmail.com',
-  password: 'shah.main20@'
+  email: 'shah.mani20@gmail.com',
+  password: 'shah.mani20@'
 };
 
 async function addAdmin() {
@@ -19,18 +19,24 @@ async function addAdmin() {
     // Check if admin already exists
     const existingAdmin = await Admin.findOne({ username: defaultAdmin.username });
     if (existingAdmin) {
-      console.log('Admin already exists with username:', defaultAdmin.username);
-      await mongoose.disconnect();
-      return;
+      // Update existing admin
+      existingAdmin.email = defaultAdmin.email;
+      existingAdmin.password = defaultAdmin.password;
+      existingAdmin.markModified('password'); // Trigger password hashing
+      await existingAdmin.save();
+      console.log('Admin updated successfully:');
+      console.log('  Username:', defaultAdmin.username);
+      console.log('  Password:', defaultAdmin.password);
+      console.log('  Email:', defaultAdmin.email);
+    } else {
+      // Create new admin
+      const admin = new Admin(defaultAdmin);
+      await admin.save();
+      console.log('Admin created successfully:');
+      console.log('  Username:', defaultAdmin.username);
+      console.log('  Password:', defaultAdmin.password);
+      console.log('  Email:', defaultAdmin.email);
     }
-
-    // Create default admin
-    const admin = new Admin(defaultAdmin);
-    await admin.save();
-    console.log('Admin created successfully:');
-    console.log('  Username:', defaultAdmin.username);
-    console.log('  Password:', defaultAdmin.password);
-    console.log('  Email:', defaultAdmin.email);
 
     // Disconnect from MongoDB
     await mongoose.disconnect();
