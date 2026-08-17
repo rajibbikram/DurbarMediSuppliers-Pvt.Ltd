@@ -13,10 +13,21 @@ router.post('/upload', auth, upload.single('image'), (req, res) => {
       return res.status(400).json({ message: 'No file uploaded' });
     }
     
-    // Return the file path
+    // Handle both Cloudinary and local storage responses
+    let imagePath;
+    if (req.file.path) {
+      // Cloudinary response
+      imagePath = req.file.path;
+    } else if (req.file.filename) {
+      // Local storage response
+      imagePath = `/uploads/${req.file.filename}`;
+    } else {
+      return res.status(500).json({ message: 'File upload failed - no file path received' });
+    }
+    
     res.json({
-      imagePath: `/uploads/${req.file.filename}`,
-      filename: req.file.filename
+      imagePath: imagePath,
+      filename: req.file.filename || req.file.public_id
     });
   } catch (error) {
     console.error('Upload error:', error);
@@ -82,7 +93,12 @@ router.post('/', auth, upload.single('image'), async (req, res) => {
     // Use uploaded file path or provided URL or default
     let imagePath = 'https://img.icons8.com/color/480/medical-doctor.png';
     if (req.file) {
-      imagePath = `/uploads/${req.file.filename}`;
+      // Handle both Cloudinary and local storage
+      if (req.file.path) {
+        imagePath = req.file.path; // Cloudinary URL
+      } else if (req.file.filename) {
+        imagePath = `/uploads/${req.file.filename}`; // Local path
+      }
     } else if (req.body.image) {
       imagePath = req.body.image;
     }
@@ -127,7 +143,12 @@ router.put('/:id', auth, upload.single('image'), async (req, res) => {
     
     // Handle image update
     if (req.file) {
-      product.image = `/uploads/${req.file.filename}`;
+      // Handle both Cloudinary and local storage
+      if (req.file.path) {
+        product.image = req.file.path; // Cloudinary URL
+      } else if (req.file.filename) {
+        product.image = `/uploads/${req.file.filename}`; // Local path
+      }
     } else if (req.body.image !== undefined) {
       product.image = req.body.image;
     }
