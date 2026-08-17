@@ -81,7 +81,7 @@ const OfferItemManagement = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-teal-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading offer items...</p>
@@ -91,7 +91,7 @@ const OfferItemManagement = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-50 to-medical-50 flex">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-teal-50 flex">
       <AdminSidebar isOpen={sidebarOpen} onToggle={toggleSidebar} />
       
       <div className="flex-1 min-w-0 transition-all duration-300">
@@ -135,7 +135,7 @@ const OfferItemManagement = () => {
 
           <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
             {filteredOfferItems.length === 0 ? (
-              <div className="text-center py-12 bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl">
+              <div className="text-center py-12 bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl">
                 <div className="flex flex-col items-center">
                   <div className="bg-blue-100 p-4 rounded-full mb-4">
                     <FaSearch className="text-blue-600 text-2xl" />

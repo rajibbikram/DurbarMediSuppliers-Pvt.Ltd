@@ -179,7 +179,7 @@ const TestimonialForm = () => {
 
   if (fetchLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-medical-50 via-white to-teal-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-medical-50 via-indigo-50 to-teal-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-medical-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading testimonial...</p>

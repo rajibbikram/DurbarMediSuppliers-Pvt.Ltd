@@ -7,16 +7,16 @@ module.exports = {
     extend: {
       colors: {
         medical: {
-          50: '#eff6ff',
-          100: '#dbeafe',
-          200: '#bfdbfe',
-          300: '#93c5fd',
-          400: '#60a5fa',
-          500: '#3b82f6',
-          600: '#2563eb',
-          700: '#1d4ed8',
-          800: '#1e40af',
-          900: '#1e3a8a',
+          50: '#f0f9ff',
+          100: '#e0f2fe',
+          200: '#bae6fd',
+          300: '#7dd3fc',
+          400: '#38bdf8',
+          500: '#0ea5e9',
+          600: '#0284c7',
+          700: '#0369a1',
+          800: '#075985',
+          900: '#0c4a6e',
         },
         teal: {
           50: '#f0fdf4',
@@ -115,15 +115,15 @@ module.exports = {
           900: '#7c2d12',
         },
         primary: {
-          DEFAULT: '#2563eb',
-          light: '#3b82f6',
-          dark: '#1d4ed8',
+          DEFAULT: '#8b5cf6',
+          light: '#a78bfa',
+          dark: '#7c3aed',
         },
       },
       boxShadow: {
-        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.08)',
-        'medium': '0 8px 30px -4px rgba(0, 0, 0, 0.1)',
-        'glow': '0 0 20px rgba(37, 99, 235, 0.3)',
+        'soft': '0 4px 20px -2px rgba(139, 92, 246, 0.15)',
+        'medium': '0 8px 30px -4px rgba(139, 92, 246, 0.2)',
+        'glow': '0 0 20px rgba(139, 92, 246, 0.4)',
       },
       animation: {
         'float': 'float 6s ease-in-out infinite',

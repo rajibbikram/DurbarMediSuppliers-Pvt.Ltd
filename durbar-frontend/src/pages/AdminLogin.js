@@ -50,7 +50,7 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-medical-50 via-white to-teal-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-teal-50 flex items-center justify-center px-4">
       <div className="max-w-md w-full">
         {/* Back to Home Button */}
         <button
@@ -119,10 +119,6 @@ const AdminLogin = () => {
               {loading ? 'Logging in...' : 'Login'}
             </button>
           </form>
-
-          <div className="mt-6 text-center text-sm text-gray-500">
-            <p>Default credentials: username: <strong>admin</strong>, password: <strong>admin123</strong></p>
-          </div>
         </div>
       </div>
     </div>

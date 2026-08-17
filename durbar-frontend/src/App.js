@@ -21,7 +21,7 @@ import TeamMemberForm from './pages/TeamMemberForm';
 function App() {
   return (
     <Router>
-      <div id="root" className="flex flex-col min-h-screen bg-gradient-to-br from-blue-50 via-white to-gray-50">
+      <div id="root" className="flex flex-col min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-teal-50">
         <Header />
         <main className="flex-grow">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
