@@ -47,7 +47,7 @@ const Testimonials = () => {
 
   const fetchTestimonials = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/testimonials?active=true');
+      const response = await fetch('https://durbarmedisuppliers-pvt-ltd.onrender.com/api/testimonials?active=true');
       if (response.ok) {
         const data = await response.json();
         setTestimonials(data);
@@ -154,7 +154,7 @@ const Testimonials = () => {
                     <div className="bg-white rounded-2xl shadow-soft p-6 md:p-8 hover:shadow-glow transform hover:-translate-y-2 transition-all duration-300 border border-gray-100 h-full">
                       <div className="flex items-center mb-4 md:mb-6">
                         <img 
-                          src={testimonial.image.startsWith('http') ? testimonial.image : `http://localhost:5000${testimonial.image}`} 
+                          src={testimonial.image.startsWith('http') ? testimonial.image : `https://durbarmedisuppliers-pvt-ltd.onrender.com${testimonial.image}`} 
                           alt={testimonial.clientName} 
                           className="w-12 h-12 md:w-16 md:h-16 rounded-full object-cover mr-3 md:mr-4 border-4 border-medical-100" 
                         />

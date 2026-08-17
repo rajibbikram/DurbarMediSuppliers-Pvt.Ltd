@@ -28,7 +28,7 @@ const ProductManagement = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/products');
+      const response = await fetch('https://durbarmedisuppliers-pvt-ltd.onrender.com/api/products');
       if (response.ok) {
         const data = await response.json();
         setProducts(data);
@@ -60,7 +60,7 @@ const ProductManagement = () => {
   const confirmDelete = async () => {
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch(`http://localhost:5000/api/products/${deleteModal.productId}`, {
+      const response = await fetch(`https://durbarmedisuppliers-pvt-ltd.onrender.com/api/products/${deleteModal.productId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -173,7 +173,7 @@ const ProductManagement = () => {
                       <tr key={product._id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                         <td className="py-4 px-6">
                           <div className="flex items-center">
-                            <img src={product.image.startsWith('http') ? product.image : `http://localhost:5000${product.image}`} alt={product.name} className="w-16 h-16 rounded-lg object-cover mr-4" />
+                            <img src={product.image.startsWith('http') ? product.image : `https://durbarmedisuppliers-pvt-ltd.onrender.com${product.image}`} alt={product.name} className="w-16 h-16 rounded-lg object-cover mr-4" />
                             <div>
                               <p className="font-medium text-gray-900">{product.name}</p>
                               <p className="text-sm text-gray-500 line-clamp-1">{product.description}</p>

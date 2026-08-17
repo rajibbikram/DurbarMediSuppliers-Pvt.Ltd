@@ -27,7 +27,7 @@ const Products = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      let url = 'http://localhost:5000/api/products';
+      let url = 'https://durbarmedisuppliers-pvt-ltd.onrender.com/api/products';
       
       // Add query parameters if present
       const params = new URLSearchParams();
@@ -115,7 +115,7 @@ const Products = () => {
                 <div key={product._id} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transform hover:-translate-y-2 transition-all duration-300 border border-gray-100 group">
                   <div className="relative overflow-hidden">
                     <img 
-                      src={product.image.startsWith('http') ? product.image : `http://localhost:5000${product.image}`} 
+                      src={product.image.startsWith('http') ? product.image : `https://durbarmedisuppliers-pvt-ltd.onrender.com${product.image}`} 
                       alt={product.name}
                       className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-500"
                     />

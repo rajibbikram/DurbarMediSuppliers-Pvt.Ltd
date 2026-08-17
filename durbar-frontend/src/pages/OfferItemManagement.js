@@ -25,7 +25,7 @@ const OfferItemManagement = () => {
 
   const fetchOfferItems = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/offer-items');
+      const response = await fetch('https://durbarmedisuppliers-pvt-ltd.onrender.com/api/offer-items');
       if (response.ok) {
         const data = await response.json();
         setOfferItems(data);
@@ -54,7 +54,7 @@ const OfferItemManagement = () => {
   const confirmDelete = async () => {
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch(`http://localhost:5000/api/offer-items/${deleteModal.itemId}`, {
+      const response = await fetch(`https://durbarmedisuppliers-pvt-ltd.onrender.com/api/offer-items/${deleteModal.itemId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });

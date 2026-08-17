@@ -27,7 +27,7 @@ const TestimonialManagement = () => {
 
   const fetchTestimonials = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/testimonials');
+      const response = await fetch('https://durbarmedisuppliers-pvt-ltd.onrender.com/api/testimonials');
       if (response.ok) {
         const data = await response.json();
         setTestimonials(data);
@@ -62,7 +62,7 @@ const TestimonialManagement = () => {
   const confirmDelete = async () => {
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch(`http://localhost:5000/api/testimonials/${deleteModal.testimonialId}`, {
+      const response = await fetch(`https://durbarmedisuppliers-pvt-ltd.onrender.com/api/testimonials/${deleteModal.testimonialId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -80,7 +80,7 @@ const TestimonialManagement = () => {
   const handleToggleFeatured = async (testimonialId, currentFeatured) => {
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch(`http://localhost:5000/api/testimonials/${testimonialId}`, {
+      const response = await fetch(`https://durbarmedisuppliers-pvt-ltd.onrender.com/api/testimonials/${testimonialId}`, {
         method: 'PUT',
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ featured: !currentFeatured })
@@ -98,7 +98,7 @@ const TestimonialManagement = () => {
   const handleToggleActive = async (testimonialId, currentActive) => {
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch(`http://localhost:5000/api/testimonials/${testimonialId}`, {
+      const response = await fetch(`https://durbarmedisuppliers-pvt-ltd.onrender.com/api/testimonials/${testimonialId}`, {
         method: 'PUT',
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ active: !currentActive })
@@ -220,7 +220,7 @@ const TestimonialManagement = () => {
                       <tr key={testimonial._id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                         <td className="py-4 px-6">
                           <div className="flex items-center">
-                            <img src={testimonial.image.startsWith('http') ? testimonial.image : `http://localhost:5000${testimonial.image}`} alt={testimonial.clientName} className="w-12 h-12 rounded-full object-cover mr-4" />
+                            <img src={testimonial.image.startsWith('http') ? testimonial.image : `https://durbarmedisuppliers-pvt-ltd.onrender.com${testimonial.image}`} alt={testimonial.clientName} className="w-12 h-12 rounded-full object-cover mr-4" />
                             <div>
                               <p className="font-medium text-gray-900">{testimonial.clientName}</p>
                               <p className="text-sm text-gray-500 line-clamp-1">{testimonial.testimonial.substring(0, 50)}...</p>

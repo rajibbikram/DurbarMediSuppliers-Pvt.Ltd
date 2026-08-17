@@ -33,7 +33,7 @@ const TestimonialForm = () => {
 
   const fetchTestimonial = useCallback(async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/testimonials/${id}`);
+      const response = await fetch(`https://durbarmedisuppliers-pvt-ltd.onrender.com/api/testimonials/${id}`);
       if (response.ok) {
         const testimonial = await response.json();
         setFormData({
@@ -46,7 +46,7 @@ const TestimonialForm = () => {
           active: testimonial.active
         });
         // Handle preview URL for database images
-        setPreviewUrl(testimonial.image.startsWith('http') ? testimonial.image : `http://localhost:5000${testimonial.image}`);
+        setPreviewUrl(testimonial.image.startsWith('http') ? testimonial.image : `https://durbarmedisuppliers-pvt-ltd.onrender.com${testimonial.image}`);
       } else {
         setError('Failed to fetch testimonial');
       }
@@ -119,8 +119,8 @@ const TestimonialForm = () => {
     try {
       const token = localStorage.getItem('adminToken');
       const url = isEditing 
-        ? `http://localhost:5000/api/testimonials/${id}`
-        : 'http://localhost:5000/api/testimonials';
+        ? `https://durbarmedisuppliers-pvt-ltd.onrender.com/api/testimonials/${id}`
+        : 'https://durbarmedisuppliers-pvt-ltd.onrender.com/api/testimonials';
       
       const method = isEditing ? 'PUT' : 'POST';
 

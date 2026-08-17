@@ -22,28 +22,6 @@ const Services = () => {
       icon: '💉'
     },
     {
-      title: 'Equipment Maintenance',
-      description: 'Professional maintenance and repair services to keep your equipment running smoothly.',
-      icon: '🔧'
-    },
-    {
-      title: 'Consultation',
-      description: 'Expert advice on medical equipment selection and facility planning.',
-      icon: '💬'
-    },
-    {
-      title: 'Training',
-      description: 'Comprehensive training for medical staff on equipment usage and maintenance.',
-      details: 'Our expert trainers provide hands-on training sessions tailored to your staff\'s needs. We cover equipment operation, safety protocols, and basic troubleshooting. Training can be conducted at your facility or our training center, with materials provided in both English and Nepali.',
-      icon: '🎓'
-    },
-    {
-      title: 'Rental Services',
-      description: 'Short-term rental options for temporary medical equipment needs.',
-      details: 'Ideal for hospitals and clinics with temporary capacity needs or during equipment maintenance. We offer flexible rental terms, delivery, setup, and pickup. Our rental inventory is regularly maintained and sanitized to meet medical standards.',
-      icon: '⏱️'
-    },
-    {
       title: '24/7 Support',
       description: 'Round-the-clock customer support for all your medical equipment needs.',
       details: 'Our dedicated support team is available 24/7 to assist with any equipment issues. We provide immediate troubleshooting, on-call technical support, and emergency service calls to ensure minimal disruption to your healthcare services.',

@@ -26,7 +26,7 @@ const OfferItemForm = () => {
 
   const fetchOfferItem = useCallback(async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/offer-items/${id}`);
+      const response = await fetch(`https://durbarmedisuppliers-pvt-ltd.onrender.com/api/offer-items/${id}`);
       if (response.ok) {
         const offerItem = await response.json();
         setFormData({
@@ -69,8 +69,8 @@ const OfferItemForm = () => {
     try {
       const token = localStorage.getItem('adminToken');
       const url = isEditing 
-        ? `http://localhost:5000/api/offer-items/${id}`
-        : 'http://localhost:5000/api/offer-items';
+        ? `https://durbarmedisuppliers-pvt-ltd.onrender.com/api/offer-items/${id}`
+        : 'https://durbarmedisuppliers-pvt-ltd.onrender.com/api/offer-items';
       
       const method = isEditing ? 'PUT' : 'POST';
 

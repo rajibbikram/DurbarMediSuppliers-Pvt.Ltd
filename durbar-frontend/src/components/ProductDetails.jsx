@@ -33,7 +33,7 @@ const ProductDetails = ({ product, show, onHide }) => {
               <div>
                 <div className="relative rounded-2xl overflow-hidden shadow-soft group">
                   <img 
-                    src={product.image.startsWith('http') ? product.image : `http://localhost:5000${product.image}`} 
+                    src={product.image.startsWith('http') ? product.image : `https://durbarmedisuppliers-pvt-ltd.onrender.com${product.image}`} 
                     alt={product.name}
                     className="w-full h-72 sm:h-80 object-cover group-hover:scale-105 transition-transform duration-500"
                   />

@@ -44,7 +44,7 @@ const ProductForm = () => {
 
   const fetchProduct = useCallback(async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/products/${id}`);
+      const response = await fetch(`https://durbarmedisuppliers-pvt-ltd.onrender.com/api/products/${id}`);
       if (response.ok) {
         const product = await response.json();
         setFormData({
@@ -57,7 +57,7 @@ const ProductForm = () => {
           inStock: product.inStock
         });
         // Handle preview URL for database images
-        setPreviewUrl(product.image.startsWith('http') ? product.image : `http://localhost:5000${product.image}`);
+        setPreviewUrl(product.image.startsWith('http') ? product.image : `https://durbarmedisuppliers-pvt-ltd.onrender.com${product.image}`);
       } else {
         setError('Failed to fetch product');
       }
@@ -121,8 +121,8 @@ const ProductForm = () => {
     try {
       const token = localStorage.getItem('adminToken');
       const url = isEditing 
-        ? `http://localhost:5000/api/products/${id}`
-        : 'http://localhost:5000/api/products';
+        ? `https://durbarmedisuppliers-pvt-ltd.onrender.com/api/products/${id}`
+        : 'https://durbarmedisuppliers-pvt-ltd.onrender.com/api/products';
       
       const method = isEditing ? 'PUT' : 'POST';
 
