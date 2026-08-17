@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaArrowLeft, FaPlus, FaEdit, FaTrash, FaSearch, FaBars, FaSignOutAlt } from 'react-icons/fa';
+import { FaPlus, FaEdit, FaTrash, FaSearch, FaBars, FaSignOutAlt } from 'react-icons/fa';
 import AdminSidebar from '../components/AdminSidebar';
 import ConfirmModal from '../components/ConfirmModal';
 
