@@ -7,9 +7,9 @@ const storage = multer.diskStorage({
     cb(null, 'uploads/');
   },
   filename: function (req, file, cb) {
-    // Generate unique filename
+    // Generate unique filename with generic prefix
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, 'testimonial-' + uniqueSuffix + path.extname(file.originalname));
+    cb(null, 'upload-' + uniqueSuffix + path.extname(file.originalname));
   }
 });
 
