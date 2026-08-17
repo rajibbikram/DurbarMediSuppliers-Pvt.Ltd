@@ -4,9 +4,9 @@ require('dotenv').config();
 
 // Default admin credentials
 const defaultAdmin = {
-  username: 'admin',
-  email: 'admin@durbarmedi.com',
-  password: 'admin123'
+  username: 'manishah',
+  email: 'shah.main20@gmail.com',
+  password: 'shah.main20@'
 };
 
 async function addAdmin() {
