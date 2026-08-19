@@ -2,45 +2,40 @@ const mongoose = require('mongoose');
 const Admin = require('./models/Admin');
 require('dotenv').config();
 
-// Default admin credentials
 const defaultAdmin = {
-  username: 'manishah',
-  email: 'shah.mani20@gmail.com',
-  password: 'shah.mani20@'
+  username: process.env.ADMIN_USERNAME,
+  email: process.env.ADMIN_EMAIL,
+  password: process.env.ADMIN_PASSWORD
 };
 
 async function addAdmin() {
   try {
-    // Connect to MongoDB using production connection string
-    const productionMongoURI = 'mongodb+srv://shahrajib278_db_user:Xsx1jqGy5ET2DiR0@cluster0.t7xxalb.mongodb.net/durbar-medical';
-    await mongoose.connect(productionMongoURI);
+    await mongoose.connect(process.env.MONGO_URI);
+
     console.log('Connected to MongoDB');
 
-    // Check if admin already exists
-    const existingAdmin = await Admin.findOne({ username: defaultAdmin.username });
+    const existingAdmin = await Admin.findOne({
+      username: defaultAdmin.username
+    });
+
     if (existingAdmin) {
-      // Update existing admin
       existingAdmin.email = defaultAdmin.email;
       existingAdmin.password = defaultAdmin.password;
-      existingAdmin.markModified('password'); // Trigger password hashing
+
+      existingAdmin.markModified('password');
+
       await existingAdmin.save();
-      console.log('Admin updated successfully:');
-      console.log('  Username:', defaultAdmin.username);
-      console.log('  Password:', defaultAdmin.password);
-      console.log('  Email:', defaultAdmin.email);
+
+      console.log('Admin updated successfully');
     } else {
-      // Create new admin
       const admin = new Admin(defaultAdmin);
       await admin.save();
-      console.log('Admin created successfully:');
-      console.log('  Username:', defaultAdmin.username);
-      console.log('  Password:', defaultAdmin.password);
-      console.log('  Email:', defaultAdmin.email);
+
+      console.log('Admin created successfully');
     }
 
-    // Disconnect from MongoDB
     await mongoose.disconnect();
-    console.log('Disconnected from MongoDB');
+
     console.log('Admin addition completed!');
   } catch (error) {
     console.error('Error adding admin:', error);
