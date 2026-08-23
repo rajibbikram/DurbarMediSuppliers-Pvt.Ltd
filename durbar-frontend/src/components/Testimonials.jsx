@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaStar, FaQuoteLeft, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaStar, FaQuoteLeft, FaChevronLeft, FaChevronRight, FaPaperPlane, FaTimes } from 'react-icons/fa';
 
 const Testimonials = () => {
   const [testimonials, setTestimonials] = useState([]);
@@ -7,6 +7,17 @@ const Testimonials = () => {
   const [error, setError] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [cardsPerView, setCardsPerView] = useState(3);
+  const [showForm, setShowForm] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  
+  const [formData, setFormData] = useState({
+    clientName: '',
+    company: '',
+    testimonial: '',
+    rating: 5
+  });
 
   useEffect(() => {
     fetchTestimonials();
@@ -79,6 +90,60 @@ const Testimonials = () => {
 
   const goToSlide = (index) => {
     setCurrentIndex(Math.min(index, maxIndex));
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleRatingChange = (rating) => {
+    setFormData(prev => ({
+      ...prev,
+      rating
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitError('');
+    setSubmitting(true);
+
+    try {
+      const response = await fetch('https://durbarmedisuppliers-pvt-ltd.onrender.com/api/testimonials/public', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (response.ok) {
+        setSubmitSuccess(true);
+        setFormData({
+          clientName: '',
+          company: '',
+          testimonial: '',
+          rating: 5
+        });
+        
+        // Hide success message after 3 seconds and close form
+        setTimeout(() => {
+          setSubmitSuccess(false);
+          setShowForm(false);
+        }, 3000);
+      } else {
+        const data = await response.json();
+        setSubmitError(data.message || 'Failed to submit testimonial');
+      }
+    } catch (err) {
+      setSubmitError('Network error. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (loading) {
@@ -217,6 +282,125 @@ const Testimonials = () => {
             </div>
           </div>
         </div>
+
+        {/* Add Your Testimonial Button */}
+        <div className="mt-8 text-center">
+          {!showForm ? (
+            <button
+              onClick={() => setShowForm(true)}
+              className="inline-flex items-center bg-gradient-to-r from-medical-600 to-teal-600 text-white px-6 py-3 rounded-xl hover:shadow-glow transform hover:-translate-y-1 transition-all duration-300 font-semibold"
+            >
+              <FaPaperPlane className="mr-2" />
+              Share Your Experience
+            </button>
+          ) : (
+            <button
+              onClick={() => setShowForm(false)}
+              className="inline-flex items-center bg-gray-200 text-gray-700 px-6 py-3 rounded-xl hover:bg-gray-300 transition-all duration-300 font-semibold"
+            >
+              <FaTimes className="mr-2" />
+              Close Form
+            </button>
+          )}
+        </div>
+
+        {/* Testimonial Submission Form */}
+        {showForm && (
+          <div className="mt-8 max-w-2xl mx-auto">
+            <div className="bg-white rounded-2xl shadow-soft p-6 md:p-8 border border-gray-100">
+              <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 text-center">Share Your Experience</h3>
+              
+              {submitSuccess && (
+                <div className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-xl mb-6 text-center">
+                  Thank you! Your testimonial has been submitted successfully and will be visible after admin approval.
+                </div>
+              )}
+
+              {submitError && (
+                <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-xl mb-6">
+                  {submitError}
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-gray-700">
+                    Your Name *
+                  </label>
+                  <input
+                    type="text"
+                    name="clientName"
+                    value={formData.clientName}
+                    onChange={handleInputChange}
+                    placeholder="Enter your name"
+                    required
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-medical-500 focus:border-transparent transition-all duration-300 bg-gray-50 focus:bg-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-gray-700">
+                    Company/Organization *
+                  </label>
+                  <input
+                    type="text"
+                    name="company"
+                    value={formData.company}
+                    onChange={handleInputChange}
+                    placeholder="Enter your company or organization"
+                    required
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-medical-500 focus:border-transparent transition-all duration-300 bg-gray-50 focus:bg-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-gray-700">
+                    Rating *
+                  </label>
+                  <div className="flex items-center space-x-2">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        type="button"
+                        onClick={() => handleRatingChange(star)}
+                        className="text-2xl transition-transform hover:scale-110"
+                      >
+                        <FaStar 
+                          className={star <= formData.rating ? 'text-yellow-400' : 'text-gray-300'} 
+                        />
+                      </button>
+                    ))}
+                    <span className="ml-2 text-gray-600">({formData.rating}/5)</span>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-gray-700">
+                    Your Testimonial *
+                  </label>
+                  <textarea
+                    name="testimonial"
+                    value={formData.testimonial}
+                    onChange={handleInputChange}
+                    placeholder="Share your experience with us..."
+                    required
+                    rows="4"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-medical-500 focus:border-transparent transition-all duration-300 bg-gray-50 focus:bg-white resize-none"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="w-full flex items-center justify-center bg-gradient-to-r from-medical-600 to-teal-600 text-white py-3 rounded-xl hover:shadow-glow transform hover:-translate-y-1 transition-all duration-300 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <FaPaperPlane className="mr-2" />
+                  {submitting ? 'Submitting...' : 'Submit Testimonial'}
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

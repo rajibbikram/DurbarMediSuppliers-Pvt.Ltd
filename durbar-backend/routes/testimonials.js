@@ -73,6 +73,39 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// @route   POST /api/testimonials/public
+// @desc    Create new testimonial (public submission)
+// @access  Public
+router.post('/public', async (req, res) => {
+  try {
+    const { clientName, company, testimonial, rating } = req.body;
+    
+    // Validate required fields
+    if (!clientName || !company || !testimonial) {
+      return res.status(400).json({ message: 'Client name, company, and testimonial are required' });
+    }
+
+    const newTestimonial = new Testimonial({
+      clientName,
+      company,
+      testimonial,
+      rating: rating || 5,
+      image: 'https://img.icons8.com/color/480/user.png', // Default image for public submissions
+      featured: false, // Public submissions cannot be featured
+      active: false // Public submissions are inactive by default (admin approval required)
+    });
+
+    await newTestimonial.save();
+    res.status(201).json({ 
+      message: 'Testimonial submitted successfully. It will be visible after admin approval.',
+      testimonial: newTestimonial
+    });
+  } catch (error) {
+    console.error('Create public testimonial error:', error);
+    res.status(500).json({ message: 'Server error creating testimonial' });
+  }
+});
+
 // @route   POST /api/testimonials
 // @desc    Create new testimonial (admin only)
 // @access  Private
