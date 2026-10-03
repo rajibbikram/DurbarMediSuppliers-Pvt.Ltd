@@ -1,0 +1,17 @@
+services:
+  # Backend API Service
+  - type: web
+    name: durbar-backend
+    env: node
+    buildCommand: cd durbar-backend && npm install
+    startCommand: cd durbar-backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+    plan: free

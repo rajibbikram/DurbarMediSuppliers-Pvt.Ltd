@@ -2,8 +2,8 @@ const multer = require('multer');
 const path = require('path');
 
 // Check if Cloudinary credentials are available
-const useCloudinary = process.env.CLOUDINARY_CLOUD_NAME && 
-                      process.env.CLOUDINARY_API_KEY && 
+const useCloudinary = process.env.CLOUDINARY_CLOUD_NAME &&
+                      process.env.CLOUDINARY_API_KEY &&
                       process.env.CLOUDINARY_API_SECRET;
 
 let storage;
@@ -13,6 +13,11 @@ if (useCloudinary) {
   const { storage: cloudinaryStorage } = require('../config/cloudinary');
   storage = cloudinaryStorage;
   console.log('Using Cloudinary for file uploads');
+} else if (process.env.NODE_ENV === 'production') {
+  // In production without Cloudinary, use memory storage
+  // This prevents issues with ephemeral filesystem on Render
+  storage = multer.memoryStorage();
+  console.log('Using memory storage for file uploads (production without Cloudinary)');
 } else {
   // Use local storage for development
   storage = multer.diskStorage({

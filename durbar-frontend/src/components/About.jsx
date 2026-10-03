@@ -3,7 +3,6 @@ import img1 from '../assets/product/extensiontube.png';
 import img2 from '../assets/product/image.png';
 import img3 from '../assets/product/kannulex.png';
 import { API_BASE_URL } from '../utils/api';
-// eslint-disable-next-line no-unused-vars
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 
@@ -11,9 +10,7 @@ const About = () => {
   const [offerItems, setOfferItems] = useState([]);
   const [teamMembers, setTeamMembers] = useState([]);
   const [loading, setLoading] = useState(true);
-  // eslint-disable-next-line no-unused-vars
   const [currentTeamIndex, setCurrentTeamIndex] = useState(0);
-  // eslint-disable-next-line no-unused-vars
   const [teamCardsPerView, setTeamCardsPerView] = useState(4);
 
   useEffect(() => {
@@ -56,24 +53,20 @@ const About = () => {
 
   const teamShouldShowNavigation = teamMembers.length > teamCardsPerView;
   const teamMaxIndex = teamShouldShowNavigation ? teamMembers.length - teamCardsPerView : 0;
-  // eslint-disable-next-line no-unused-vars
   const teamTotalPages = teamShouldShowNavigation ? teamMembers.length - teamCardsPerView + 1 : 1;
 
-  // eslint-disable-next-line no-unused-vars
   const goToTeamPrevious = () => {
-    setCurrentTeamIndex((prevIndex) => 
+    setCurrentTeamIndex((prevIndex) =>
       prevIndex === 0 ? teamMaxIndex : prevIndex - 1
     );
   };
 
-  // eslint-disable-next-line no-unused-vars
   const goToTeamNext = () => {
-    setCurrentTeamIndex((prevIndex) => 
+    setCurrentTeamIndex((prevIndex) =>
       prevIndex >= teamMaxIndex ? 0 : prevIndex + 1
     );
   };
 
-  // eslint-disable-next-line no-unused-vars
   const goToTeamSlide = (index) => {
     setCurrentTeamIndex(Math.min(index, teamMaxIndex));
   };
